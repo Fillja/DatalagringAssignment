@@ -29,47 +29,15 @@ public class UserService
     {
         try
         {
-            var userEntity = new UserEntity
-            {
-                FirstName = userReg.FirstName,
-                LastName = userReg.LastName
-            };
+            var userEntity = _userFactories.CreateUserEntity(userReg.FirstName!, userReg.LastName!);
 
-            var userResult = _userRepository.Create(userEntity);
+            var addressEntity = _userFactories.GetOrCreateAddressEntity(userReg.Street, userReg.PostalCode, userReg.City);
 
-            var addressEntity = new AddressEntity
-            {
-                Street = userReg.Street,
-                City = userReg.City,
-                PostalCode = userReg.PostalCode,
-            };
+            var roleEntity = _userFactories.GetOrCreateRoleEntity(userReg.FirstName!);
 
-            var addressResult = _addressRepository.Create(addressEntity);
+            var verificationEntity = _userFactories.GetOrCreateVerificationEntity(userEntity.Id, userReg.Email, userReg.Password);
 
-            var roleEntity = new RoleEntity
-            {
-                RoleName = "admin",
-            };
-
-            var roleResult = _roleRepository.Create(roleEntity);
-
-            var verificationEntity = new VerificationEntity
-            {
-                UserId = userResult.Id,
-                Email = userReg.Email,
-                Password = userReg.Password
-            };
-
-            _verificationRepository.Create(verificationEntity);
-
-            var profileEntity = new ProfileEntity
-            {
-                UserId = userResult.Id,
-                AddressId = addressResult.Id,
-                RoleId = roleResult.Id,
-            };
-
-            _profileRepository.Create(profileEntity);
+            var profileEntity = _userFactories.CreateProfileEntity(userEntity.Id, addressEntity.Id, roleEntity.Id);
 
             return true;
         }
@@ -79,15 +47,20 @@ public class UserService
 
     public IEnumerable<User> GetAllUsers()
     {
-        var profileList = _profileRepository.GetAll();
-        var userList = new List<User>();
-
-        foreach (var item in profileList)
+        try
         {
-            var user = _userFactories.CreateFullUser(item);
-            userList.Add(user);
-        }
+            var profileList = _profileRepository.GetAll();
+            var userList = new List<User>();
 
-        return userList;
+            foreach (var entity in profileList)
+            {
+                var user = _userFactories.CompileFullUser(entity);
+                userList.Add(user);
+            }
+
+            return userList;
+        }
+        catch (Exception ex) { Debug.WriteLine("ERROR:: " + ex.Message); }
+        return null!;
     }
 }

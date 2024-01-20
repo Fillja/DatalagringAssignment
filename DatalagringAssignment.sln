@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{3BC561D3-3D64-4BDA-A8D9-6C8FEC8B12B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.WPF", "Presentation.WPF\Presentation.WPF.csproj", "{D4C44E22-044C-4150-BB50-5248A7159A22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation.WPF", "Presentation.WPF\Presentation.WPF.csproj", "{D4C44E22-044C-4150-BB50-5248A7159A22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
