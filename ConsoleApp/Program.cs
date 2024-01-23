@@ -9,8 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 {
-    services.AddDbContext<DataContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Robin\source\repos\DatalagringAssignment\Infrastructure\Data\local_database.mdf;Integrated Security=True;Connect Timeout=30"));
-    //services.AddDbContext<DataContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Programmering\EC\DATALAGRING-COURSE\DataStoringAssignment\Shared\Data\local_database.mdf;Integrated Security=True;Connect Timeout=30;Encrypt=True"));
+    services.AddDbContext<DataContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Programmering\EC\DATALAGRING-COURSE\DataStoringAssignment\Shared\Data\local_database.mdf;Integrated Security=True;Connect Timeout=30;Encrypt=True"));
 
     services.AddScoped<UserRepository>();
     services.AddScoped<AddressRepository>();

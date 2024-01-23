@@ -48,17 +48,15 @@ public abstract class BaseRepository<TEntity> where TEntity : class
         return null!;
     }
 
-    public virtual TEntity Update(TEntity entity)
+    public virtual TEntity Update(TEntity entity, Expression<Func<TEntity, bool>> predicate)
     {
         try
         {
-            var entityToUpdate = _context.Set<TEntity>().Find(entity);
-            if(entityToUpdate != null)
+            if(Exists(predicate))
             {
-                entityToUpdate = entity;
-                _context.Set<TEntity>().Update(entityToUpdate);
+                _context.Set<TEntity>().Update(entity);
                 _context.SaveChanges();
-                return entityToUpdate;
+                return entity;
             }
         }
         catch (Exception ex) { Debug.WriteLine("ERROR:: " + ex.Message); }

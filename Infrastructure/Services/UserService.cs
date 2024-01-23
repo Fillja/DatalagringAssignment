@@ -6,30 +6,20 @@ using System.Diagnostics;
 
 namespace Infrastructure.Services;
 
-public class UserService
+public class UserService(UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, UserFactories userFactories)
 {
-    private readonly UserRepository _userRepository;
-    private readonly RoleRepository _roleRepository;
-    private readonly AddressRepository _addressRepository;
-    private readonly VerificationRepository _verificationRepository;
-    private readonly ProfileRepository _profileRepository;
-    private readonly UserFactories _userFactories;
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, UserFactories userFactories)
-    {
-        _userRepository = userRepository;
-        _roleRepository = roleRepository;
-        _addressRepository = addressRepository;
-        _verificationRepository = verificationRepository;
-        _profileRepository = profileRepository;
-        _userFactories = userFactories;
-    }
+    private readonly UserRepository _userRepository = userRepository;
+    private readonly RoleRepository _roleRepository = roleRepository;
+    private readonly AddressRepository _addressRepository = addressRepository;
+    private readonly VerificationRepository _verificationRepository = verificationRepository;
+    private readonly ProfileRepository _profileRepository = profileRepository;
+    private readonly UserFactories _userFactories = userFactories;
 
     public bool CreateUser(UserRegistrationForm userReg)
     {
         try
         {
-            var userEntity = _userFactories.CreateUserEntity(userReg.FirstName!, userReg.LastName!);
+            var userEntity = _userFactories.CreateUserEntity(userReg.FirstName, userReg.LastName);
 
             var addressEntity = _userFactories.GetOrCreateAddressEntity(userReg.Street, userReg.PostalCode, userReg.City);
 

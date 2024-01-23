@@ -5,23 +5,14 @@ using System.Diagnostics;
 
 namespace Infrastructure.Factories;
 
-public class UserFactories
+public class UserFactories(UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository)
 {
 
-    private readonly UserRepository _userRepository;
-    private readonly RoleRepository _roleRepository;
-    private readonly AddressRepository _addressRepository;
-    private readonly VerificationRepository _verificationRepository;
-    private readonly ProfileRepository _profileRepository;
-
-    public UserFactories(UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository)
-    {
-        _userRepository = userRepository;
-        _roleRepository = roleRepository;
-        _addressRepository = addressRepository;
-        _verificationRepository = verificationRepository;
-        _profileRepository = profileRepository;
-    }
+    private readonly UserRepository _userRepository = userRepository;
+    private readonly RoleRepository _roleRepository = roleRepository;
+    private readonly AddressRepository _addressRepository = addressRepository;
+    private readonly VerificationRepository _verificationRepository = verificationRepository;
+    private readonly ProfileRepository _profileRepository = profileRepository;
 
     public User CompileFullUser(ProfileEntity entity)
     {
