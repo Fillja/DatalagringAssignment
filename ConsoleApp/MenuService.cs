@@ -5,6 +5,7 @@ using Infrastructure.Respositories;
 using Infrastructure.Services;
 using Microsoft.IdentityModel.Tokens;
 
+
 namespace ConsoleApp;
 
 public class MenuService(UserService userService, UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, UserFactories userFactories)
@@ -60,47 +61,47 @@ public class MenuService(UserService userService, UserRepository userRepository,
             bool emailCheck = true;
             Console.Clear();
 
+            SetUserProperties(userReg, () => userReg.FirstName, value => userReg.FirstName = value, "Enter first name: ", "First name may not be empty!");
 
-            Console.Write("First Name: ");
-            userReg.FirstName = Console.ReadLine()!;
-
-            Console.Write("Last Name: ");
-            userReg.LastName = Console.ReadLine()!;
+            SetUserProperties(userReg, () => userReg.LastName, value => userReg.LastName = value, "Enter surname: ", "Surname may not be empty!");
 
             while (emailCheck)
             {
-                Console.Write("Email: ");
-                userReg.Email = Console.ReadLine()!;
-                if (!_verificationRepository.Exists(x => x.Email == userReg.Email))
+                Console.Write("Enter email: ");
+                var emailInput = Console.ReadLine()!;
+
+                if (!string.IsNullOrEmpty(emailInput))
                 {
-                    emailCheck = false;
+                    if (!_verificationRepository.Exists(x => x.Email == emailInput))
+                    {
+                        userReg.Email = emailInput;
+                        emailCheck = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nA user with that E-mail already exists!");
+                        ReturnToMainMenu("Press any key to try again, or press 0 to return to the main menu.");
+                    }
                 }
                 else
-                {
-                    Console.WriteLine("\nA user with that E-mail already exists!");
-                    ReturnToMainMenu("Press any key to try again, or press 0 to return to the main menu.");
-                }
+                    Console.WriteLine("Email may not be empty!");
             }
 
-            Console.Write("Password: ");
-            userReg.Password = Console.ReadLine()!;
+            SetUserProperties(userReg, () => userReg.Password, value => userReg.Password = value, "Enter password: ", "Password may not be empty!");
 
-            Console.Write("Street: ");
-            userReg.Street = Console.ReadLine()!;
+            SetUserProperties(userReg, () => userReg.Street, value => userReg.Street = value, "Enter streetname: ", "Streetname may not be empty!");
 
-            Console.Write("Postal Code: ");
-            userReg.PostalCode = Console.ReadLine()!;
+            SetUserProperties(userReg, () => userReg.PostalCode, value => userReg.PostalCode = value, "Enter postal code: ", "Postal code may not be empty!");
 
-            Console.Write("City: ");
-            userReg.City = Console.ReadLine()!;
+            SetUserProperties(userReg, () => userReg.City, value => userReg.City = value, "Enter city: ", "City may not be empty!");
 
             var result = _userService.CreateUser(userReg);
 
             Console.Clear();
             if (result)
-                Console.WriteLine("SUCCESS!");
+                Console.WriteLine("User added successfully!");
             else
-                Console.WriteLine("FAIL!");
+                Console.WriteLine("Something went wrong, please try again.");
 
             Console.ReadKey();
             ShowMainMenu();
@@ -153,9 +154,9 @@ public class MenuService(UserService userService, UserRepository userRepository,
             Console.WriteLine($"\tStreet: \t{entity.Address.Street}");
             Console.WriteLine($"\tPostal Code: \t{entity.Address.PostalCode}");
             Console.WriteLine("-----------------------------------\n\n");
-            Console.WriteLine("Enter the value of the property you would like to update.");
-            Console.WriteLine("Enter 9 to delete the user.");
-            Console.WriteLine("Enter 0 to return to main menu.");
+            Console.WriteLine("*\t Enter the value of the property you would like to update.");
+            Console.WriteLine("**\t Enter 9 to delete the user.");
+            Console.WriteLine("***\t Enter 0 to return to main menu.");
             var result = Console.ReadLine();
 
             switch (result)
@@ -201,12 +202,25 @@ public class MenuService(UserService userService, UserRepository userRepository,
 
                     if (!email.IsNullOrEmpty())
                     {
-                        VerificationEntity entityToUpdate = _verificationRepository.GetOne(x => x.UserId == entity.UserId);
-                        entityToUpdate.Email = email;
-                        _verificationRepository.Update(entityToUpdate, x => x.UserId == entityToUpdate.UserId);
+                        if (!_verificationRepository.Exists(x => x.Email == email))
+                        {
+                            VerificationEntity entityToUpdate = _verificationRepository.GetOne(x => x.UserId == entity.UserId);
+                            entityToUpdate.Email = email;
+                            _verificationRepository.Update(entityToUpdate, x => x.UserId == entityToUpdate.UserId);
 
-                        Console.Clear();
-                        Console.WriteLine("Update successful!");
+                            Console.Clear();
+                            Console.WriteLine("Update successful!");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nA user with that E-mail already exists.\nPress any key to try again.");
+                            Console.ReadKey();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nEmail may not be empty.\nPress any key to try again.");
                         Console.ReadKey();
                     }
                     break;
@@ -244,6 +258,32 @@ public class MenuService(UserService userService, UserRepository userRepository,
             ShowMainMenu();
     }
 
+    /// <summary>
+    /// Metod för att sätta en kontakts egenskap, med validering vid tomt fält.
+    /// </summary>
+    /// <param name="user">Tar emot en user-dto av typen UserRegistrationForm</param>
+    /// <param name="getProperty">Funktion som kallas "Function delegate" som hämtar värdet av egenskapen från user-dto:n</param>
+    /// <param name="setProperty">Funktion som kallas "Action delegate" som tar emot en sträng för att ställa in värdet av egenskapen på user-dto:n</param>
+    /// <param name="message">Meddelande som skrivs ut till användaren, ombeder dem att mata in en egenskap till user.</param>
+    /// <param name="errorMessage">Felmeddelande om användaren gör en ogiltig inmatning.</param>
+    public void SetUserProperties(UserRegistrationForm user, Func<string> getProperty, Action<string> setProperty, string message, string errorMessage)
+    {
+        while (true)
+        {
+            Console.Write($"{message}");
+            var input = Console.ReadLine()!;
+            if (!string.IsNullOrEmpty(input))
+            {
+                setProperty(input);
+                break;
+            }
+            else
+            {
+                Console.WriteLine($"{errorMessage}\n");
+            }
+        }
+    }
+
     private void UpdateAddress(ProfileEntity entity)
     {
         while (true)
@@ -275,4 +315,6 @@ public class MenuService(UserService userService, UserRepository userRepository,
             }
         }
     }
+
+
 }
