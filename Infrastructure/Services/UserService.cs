@@ -5,12 +5,8 @@ using System.Diagnostics;
 
 namespace Infrastructure.Services;
 
-public class UserService(UserRepository userRepository, RoleRepository roleRepository, AddressRepository addressRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, UserFactories userFactories)
+public class UserService(ProfileRepository profileRepository, UserFactories userFactories)
 {
-    private readonly UserRepository _userRepository = userRepository;
-    private readonly RoleRepository _roleRepository = roleRepository;
-    private readonly AddressRepository _addressRepository = addressRepository;
-    private readonly VerificationRepository _verificationRepository = verificationRepository;
     private readonly ProfileRepository _profileRepository = profileRepository;
     private readonly UserFactories _userFactories = userFactories;
 
@@ -22,24 +18,27 @@ public class UserService(UserRepository userRepository, RoleRepository roleRepos
 
             var addressEntity = _userFactories.GetOrCreateAddressEntity(userReg.Street, userReg.PostalCode, userReg.City);
 
-            var roleEntity = _userFactories.GetOrCreateRoleEntity(userReg.FirstName!);
+            var roleEntity = _userFactories.GetOrCreateRoleEntity(userReg.FirstName);
 
             var verificationEntity = _userFactories.GetOrCreateVerificationEntity(userEntity.Id, userReg.Email, userReg.Password);
 
             var profileEntity = _userFactories.CreateProfileEntity(userEntity.Id, addressEntity.Id, roleEntity.Id);
 
-            return true;
+            if(profileEntity != null)
+               return true;
         }
         catch (Exception ex) { Debug.WriteLine("ERROR:: " + ex.Message); }
         return false;
     }
 
-    public IEnumerable<User> GetAllUsers()
+
+    // Passwordskyddande Get()-function som hämtar DTO istället för Entity.
+    public IEnumerable<UserDto> GetAllUsers()
     {
         try
         {
             var profileList = _profileRepository.GetAll();
-            var userList = new List<User>();
+            var userList = new List<UserDto>();
 
             foreach (var entity in profileList)
             {

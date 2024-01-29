@@ -14,7 +14,7 @@ public class UserFactories(UserRepository userRepository, RoleRepository roleRep
     private readonly VerificationRepository _verificationRepository = verificationRepository;
     private readonly ProfileRepository _profileRepository = profileRepository;
 
-    public User CompileFullUser(ProfileEntity entity)
+    public UserDto CompileFullUser(ProfileEntity entity)
     {
         try
         {
@@ -22,7 +22,7 @@ public class UserFactories(UserRepository userRepository, RoleRepository roleRep
             var addressEntity = _addressRepository.GetOne(x => x.Id == entity.AddressId);
             var verificationEntity = _verificationRepository.GetOne(x => x.UserId == entity.UserId);
             var roleEntity = _roleRepository.GetOne(x => x.Id == entity.RoleId);
-            var user = new User
+            var user = new UserDto
             {
                 FirstName = userEntity.FirstName,
                 LastName = userEntity.LastName,
@@ -54,7 +54,6 @@ public class UserFactories(UserRepository userRepository, RoleRepository roleRep
         catch (Exception ex) { Debug.WriteLine("ERROR:: " + ex.Message); }
         return null!;
     }
-
 
     public AddressEntity GetOrCreateAddressEntity(string street, string postalCode, string city)
     {
