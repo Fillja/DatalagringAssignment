@@ -32,7 +32,6 @@ public class UserService(ProfileRepository profileRepository, UserFactories user
     }
 
 
-    // Passwordskyddande Get()-function som hämtar DTO istället för Entity.
     public IEnumerable<UserDto> GetAllUsers()
     {
         try

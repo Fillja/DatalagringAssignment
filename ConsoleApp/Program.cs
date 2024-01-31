@@ -31,6 +31,7 @@ var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
     services.AddScoped<ProductService>();
     services.AddScoped<UserService>();
 
+    services.AddSingleton<MenuService>();
     services.AddSingleton<MainMenuService>();
 
 }).Build();

@@ -15,26 +15,27 @@ public class ProductFactories(CategoryRepository categoryRepository, Manufacture
     private readonly OrderRepository _orderRepository = orderRepository;
     private readonly OrderRowRepository _orderRowRepository = orderRowRepository;
 
-    //public ProductDto CompileFullProduct(Product entity)
-    //{
-    //    try
-    //    {
-    //        var categoryEntity = _categoryRepository.GetOne(x => x.Id == entity.CategoryId);
-    //        var manufacturerEntity = _manufacturerRepository.GetOne(x => x.Id == entity.ManufacturerId);
+    public ProductDto CompileFullProduct(Product entity)
+    {
+        try
+        {
+            var categoryEntity = _categoryRepository.GetOne(x => x.Id == entity.CategoryId);
+            var manufacturerEntity = _manufacturerRepository.GetOne(x => x.Id == entity.ManufacturerId);
 
-    //        var productDto = new ProductDto 
-    //        {
-    //            Title = entity.Title,
-    //            Description = entity.Description,
-    //            Price = entity.Price,
-    //            CategoryName = categoryEntity.CategoryName,
-    //            ManufacturerName = manufacturerEntity.ManufacturerName
-    //        };
-    //        return productDto;
-    //    }
-    //    catch (Exception ex) { Debug.WriteLine("ERROR :: " + ex.Message); }
-    //    return null!;
-    //}
+            var productDto = new ProductDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                Price = entity.Price,
+                CategoryName = categoryEntity.CategoryName,
+                ManufacturerName = manufacturerEntity.ManufacturerName
+            };
+            return productDto;
+        }
+        catch (Exception ex) { Debug.WriteLine("ERROR :: " + ex.Message); }
+        return null!;
+    }
 
     public Category GetOrCreateCategoryEntity(string categoryName)
     {

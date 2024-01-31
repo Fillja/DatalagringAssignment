@@ -70,3 +70,7 @@ JOIN Orders o on o.Id = r.OrderId
 JOIN Products p on p.Id = r.ProductId
 JOIN Categories c ON c.Id = p.CategoryId
 JOIN Manufacturers m on m.Id = p.ManufacturerId
+
+DELETE from Orders
+
+DBCC CHECKIDENT (Orders, RESEED, 0);
