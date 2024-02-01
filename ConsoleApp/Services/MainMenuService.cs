@@ -5,12 +5,11 @@ using Infrastructure.Factories;
 using Infrastructure.Respositories;
 using Infrastructure.Respositories.ProductRepositories;
 using Infrastructure.Services;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ConsoleApp.Services;
 
-public class MainMenuService(UserService userService, ProductService productService, MenuService menuService, UserRepository userRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, ProductRepository productRepository, OrderRowRepository orderRowRepository, OrderRepository orderRepository, UserFactories userFactories, ProductFactories productFactories) 
+public class MainMenuService(UserService userService, ProductService productService, MenuService menuService, UserRepository userRepository, VerificationRepository verificationRepository, ProfileRepository profileRepository, ProductRepository productRepository, OrderRowRepository orderRowRepository, UserFactories userFactories, ProductFactories productFactories) 
 {
     private readonly UserService _userService = userService;
     private readonly ProductService _productService = productService;
@@ -131,30 +130,41 @@ public class MainMenuService(UserService userService, ProductService productServ
     public void ShowAllUsersMenu()
     {
         var userList = _userService.GetAllUsers();
-        Console.Clear();
 
-        Console.WriteLine("Displaying all users:\n\n ");
-        foreach (var (user, index) in userList.Select((u, i) => (u, i)))
+        while (true)
         {
-            Console.WriteLine("---------------------------");
-            Console.WriteLine($"User: \t\t{index + 1}");
-            Console.WriteLine($"First Name: \t{user.FirstName}");
-            Console.WriteLine($"Last Name: \t{user.LastName}");
-            Console.WriteLine("---------------------------\n");
-        }
-        Console.WriteLine("Enter the number of which user you would like to inspect, or enter 0 to return to the main menu.");
-        var result = int.Parse(Console.ReadLine()!);
-
-        if (result == 0)
-            ShowMainMenu();
-        else
-        {
-            UserDto selectedUser = userList.ElementAt(result - 1);
-            VerificationEntity e = _verificationRepository.GetOne(x => x.Email == selectedUser.Email);
-            ProfileEntity entity = _profileRepository.GetOne(x => x.UserId == e.UserId);
-
             Console.Clear();
-            ShowEditUsersMenu(entity);
+
+            Console.WriteLine("Displaying all users:\n\n ");
+            foreach (var (user, index) in userList.Select((u, i) => (u, i)))
+            {
+                Console.WriteLine("---------------------------");
+                Console.WriteLine($"User: \t\t{index + 1}");
+                Console.WriteLine($"First Name: \t{user.FirstName}");
+                Console.WriteLine($"Last Name: \t{user.LastName}");
+                Console.WriteLine("---------------------------\n");
+            }
+            Console.WriteLine("Enter the Id of which user you would like to inspect, or enter 0 to return to the main menu.");
+            var result = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(result) && int.TryParse(result, out var parsedResult))
+            {
+                if (parsedResult == 0)
+                    ShowMainMenu();
+                else
+                {
+                    UserDto selectedUser = userList.ElementAt(parsedResult - 1);
+                    VerificationEntity e = _verificationRepository.GetOne(x => x.Email == selectedUser.Email);
+                    ProfileEntity entity = _profileRepository.GetOne(x => x.UserId == e.UserId);
+
+                    Console.Clear();
+                    ShowEditUsersMenu(entity);
+                }
+            }
+            else
+            {
+                _menuService.InputValidation("You must enter a valid ID, please try again.");
+            }
         }
     }
 
@@ -253,7 +263,7 @@ public class MainMenuService(UserService userService, ProductService productServ
                     break;
 
                 case "0":
-                    ShowMainMenu();
+                    ShowAllUsersMenu();
                     break;
 
                 default:
@@ -363,9 +373,8 @@ public class MainMenuService(UserService userService, ProductService productServ
             Console.Write("Enter the ID of the product you would like to inspect: ");
 
             var result = Console.ReadLine();
-            if (!string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(result) && int.TryParse(result, out var parsedResult))
             {
-                var parsedResult = Int32.Parse(result!);
                 var entity = _productRepository.GetOne(x => x.Id == parsedResult);
 
                 if(_productRepository.Exists(x => x.Id == entity.Id))
@@ -404,7 +413,7 @@ public class MainMenuService(UserService userService, ProductService productServ
             }
             else
             {
-                _menuService.InputValidation("You have to enter an ID, please try again.");
+                _menuService.InputValidation("You must enter a valid ID, please try again.");
             }
         }
     }

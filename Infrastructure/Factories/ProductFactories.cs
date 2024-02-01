@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Dtos;
-using Infrastructure.Entities;
 using Infrastructure.Entities.ProductEntities;
-using Infrastructure.Respositories;
 using Infrastructure.Respositories.ProductRepositories;
 using System.Diagnostics;
 

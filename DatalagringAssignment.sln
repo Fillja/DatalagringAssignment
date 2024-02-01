@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{3BC561D3-3D64-4BDA-A8D9-6C8FEC8B12B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation.WPF", "Presentation.WPF\Presentation.WPF.csproj", "{D4C44E22-044C-4150-BB50-5248A7159A22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{EB49ACFD-E2AA-4AB4-BEAC-37DE9F8E4FCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{3BC561D3-3D64-4BDA-A8D9-6C8FEC8B12B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BC561D3-3D64-4BDA-A8D9-6C8FEC8B12B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BC561D3-3D64-4BDA-A8D9-6C8FEC8B12B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4C44E22-044C-4150-BB50-5248A7159A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4C44E22-044C-4150-BB50-5248A7159A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4C44E22-044C-4150-BB50-5248A7159A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4C44E22-044C-4150-BB50-5248A7159A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB49ACFD-E2AA-4AB4-BEAC-37DE9F8E4FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB49ACFD-E2AA-4AB4-BEAC-37DE9F8E4FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB49ACFD-E2AA-4AB4-BEAC-37DE9F8E4FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB49ACFD-E2AA-4AB4-BEAC-37DE9F8E4FCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
