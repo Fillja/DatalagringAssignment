@@ -13,14 +13,14 @@ public class UserRepository_Tests
         .Options);
 
     [Fact]
-    public void CreateShould_SaveOneEntityToDatabase_AndReturnTheEntity()
+    public void CreateShould_SaveOneUserEntityToDatabase_AndReturnTheEntity()
     {
         //Arrange
         var _userRepository = new UserRepository(_context);
-        var entity = new UserEntity { Id = 1, FirstName = "Test", LastName = "Testsson" };
+        var userEntity = new UserEntity { Id = 1, FirstName = "Test", LastName = "Testsson" };
 
         //Act
-        var result = _userRepository.Create(entity);
+        var result = _userRepository.Create(userEntity);
 
         //Assert
         Assert.NotNull(result);
@@ -34,10 +34,10 @@ public class UserRepository_Tests
     {
         //Arrange
         var _userRepository = new UserRepository(_context);
-        var entity = new UserEntity { FirstName = "Test" };
+        var userEntity = new UserEntity { FirstName = "Test" };
 
         //Act
-        var result = _userRepository.Create(entity);
+        var result = _userRepository.Create(userEntity);
 
         //Assert
         Assert.Null(result);

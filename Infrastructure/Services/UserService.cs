@@ -20,7 +20,7 @@ public class UserService(ProfileRepository profileRepository, UserFactories user
 
             var roleEntity = _userFactories.GetOrCreateRoleEntity(userReg.FirstName);
 
-            var verificationEntity = _userFactories.GetOrCreateVerificationEntity(userEntity.Id, userReg.Email, userReg.Password);
+            var verificationEntity = _userFactories.CreateVerificationEntity(userEntity.Id, userReg.Email, userReg.Password);
 
             var profileEntity = _userFactories.CreateProfileEntity(userEntity.Id, addressEntity.Id, roleEntity.Id);
 
@@ -30,7 +30,6 @@ public class UserService(ProfileRepository profileRepository, UserFactories user
         catch (Exception ex) { Debug.WriteLine("ERROR:: " + ex.Message); }
         return false;
     }
-
 
     public IEnumerable<UserDto> GetAllUsers()
     {

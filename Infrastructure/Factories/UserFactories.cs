@@ -102,7 +102,7 @@ public class UserFactories(UserRepository userRepository, RoleRepository roleRep
         return null!;
     }
 
-    public VerificationEntity GetOrCreateVerificationEntity(int userId, string email, string password)
+    public VerificationEntity CreateVerificationEntity(int userId, string email, string password)
     {
         try
         {

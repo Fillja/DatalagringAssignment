@@ -26,9 +26,6 @@ public partial class SecondDataContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Programmering\\EC\\DATALAGRING-COURSE\\DatalagringAssignment\\Infrastructure\\Data\\second_local_database.mdf;Integrated Security=True;Connect Timeout=30");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>(entity =>
